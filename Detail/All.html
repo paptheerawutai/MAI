@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charts Display</title>
+    <link rel="stylesheet" href="Sty.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+  <div class="LCD">
+    <!-- ส่วนเลือกวันที่ -->
+    <div class="date-picker-container">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate">
+        
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate">
+        
+        <button onclick="updateCharts()">Update Charts</button>
+    </div>
+  </div>
+    <!-- ส่วนสำหรับแสดงกราฟ -->
+    <div class="charts-container">
+        <div>
+          <h1>losstime 30วันย้อนหลัง</h1>
+          <canvas id="losstimeChart"></canvas>
+        </div>
+        <div>
+          <h1>Alarm 30วันย้อนหลัง</h1>
+          <canvas id="alarmChart"></canvas>
+        </div>
+    </div>
+    
+  
+
+
+    <script src="f1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    
+</body>
+</html>

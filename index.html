@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inputs Dashboard and 3D Scene</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="status_.css">
+    <style>
+        /* ตำแหน่งและสไตล์ของ .chart_btn */
+          .chart_btn {
+              position: absolute; /* ใช้ตำแหน่ง absolute เพื่อกำหนดตำแหน่งตามที่ต้องการ */
+              top: 20px;          /* ระยะห่างจากขอบบนขององค์ประกอบหลัก */
+              right: 20px;        /* ระยะห่างจากขอบขวาขององค์ประกอบหลัก */
+              display: flex;      /* ใช้ flex เพื่อจัดปุ่มให้เรียงกัน */
+              gap: 10px;          /* ระยะห่างระหว่างปุ่ม */
+          }
+
+          /* สไตล์ของปุ่ม */
+          .chart_btn button {
+              background-color: #007bff;
+              border: none;
+              color: white;
+              padding: 10px 20px;
+              font-size: 16px;
+              cursor: pointer;
+              border-radius: 5px;
+              transition: background-color 0.3s ease;
+          }
+
+          .chart_btn button:hover {
+              background-color: #0056b3;
+          }
+          /* ส่วนเลือกวันที่ */
+          .data_Set {
+              top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+          }
+          
+          .data_Set label {
+            font-size: 1.1em;
+            color: #00d1ff;
+          }
+          
+          .data_Set input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid #00d1ff;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #1b203a;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+          }
+          
+          .data_Set input[type="date"]:hover,
+          .data_Set input[type="date"]:focus {
+            border-color: #00ffea;
+            box-shadow: 0 0 8px #00ffea;
+          }
+
+          
+
+          
+
+
+
+    </style>
+
+
+</head>
+<body>
+  <div id="toggleDashboard1"></div>
+
+
+ <!-- Menu Button -->
+ <div id="menuContainer">
+    <div id="menuBar">
+      <a onclick="toggleDashboard_input()">D_Input</a>
+      <a >||</a>
+      <a onclick="toggleDashboard1()">D_Alarm  </a>
+      <a >||</a>
+      <a onclick="toggleDashboard_status()">Status</a>
+    </div>
+  </div>
+
+  <div id="statusTab">
+    <div id="statusContent">
+        <!-- Radar Chart -->
+        <div id="chartContainer">
+            <canvas id="radarChart"></canvas>
+        </div>
+
+        <!-- Data Table -->
+        <div id="tableContainer">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <!-- <th>Input ID</th> -->
+                        <th>Description</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                    <!-- ข้อมูลจะถูกเพิ่มที่นี่ -->
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+    </div>
+  </div>
+
+  <div class="container">
+      <div id="dash" class="dashboard-section">
+      
+          <h3 >Inputs Dashboard</h3>
+          <div id="dashboard" class="dashboard"></div>
+      </div>
+      
+      <div id="infoBox-1">
+          <h3>Details</h3>
+          <table id="infoTable">
+              <tr><th>Attribute</th><th>Value</th></tr>
+          </table>
+      </div>
+
+      <!-- 3D Scene container -->
+      <div id="3d-container"></div>
+      <div id="dashboard1" class="dashboard1"></div>
+      
+      <div class="LED_">
+        <div class="light green" id="light-green"></div>
+        <div class="light orange" id="light-orange"></div>
+        <div class="light red" id="light-red"></div>
+      </div>
+
+
+  </div>
+
+  <!-- Modal for Details -->
+  <div id="detailsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeDetails()">&times;</span>
+        <!-- Canvas for Chart -->
+         
+        <canvas id="lineChart"></canvas>
+        <div class="data_Set" style="text-align: center; margin-top: 10px;">
+          <!-- <button class="chart_btn1" onclick="window.location.href='../3D_MC/Detail/ALL.html';">ดูข้อมูลวันอื่นๆ</button> -->
+          <!-- <button class="chart_btn2" onclick="window.location.href='../3D_MC/Detail/ALL.html';">กราฟการแก้ไขปัญหา</button> -->
+          <button class="chart_btn2" onclick="sendData()">กราฟการแก้ไขปัญหา</button>
+
+          <label class="off"  style="display: block;"  for="datePicker">เลือกวันที่:</label>
+          <input class="off" style="display: block;" type="date" id="datePicker">
+        </div>
+
+        <!-- <h2 id="modalTitle"></h2> -->
+        <!-- Table for Details -->
+        <table id="detailsTable">
+          <thead>
+            <tr>
+              <th>ประเภท</th>
+              <!-- <th>Input ID</th> -->
+              <th>วันที่</th>
+              <th>เวลาเริ่ม</th>
+              <th>เวลาสิ้นสุด</th>
+              <th>ใช้เวลาไป</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be inserted here dynamically -->
+          </tbody>
+        </table>
+      </div>
+  </div>
+  <!-- <button id="toggleDashboard">Toggle Dashboard</button> -->
+  <script>
+      // function toggleDashboard1() {
+      //     const dashboard1 = document.getElementById("dashboard1");
+      //     if (dashboard1.style.display === "none" || dashboard1.style.display === "") {
+      //         dashboard1.style.display = "block";
+      //     } else {
+      //         dashboard1.style.display = "none";
+      //     }
+      // }
+      function toggleDashboard1() {
+        const dashboard1 = document.getElementById("dashboard1");
+
+        if (dashboard1.style.display === "none" || dashboard1.style.display === "") {
+          dashboard1.style.display = "block"; // แสดง
+          dashboard1.classList.add("grid-layout"); // เพิ่มคลาสเพื่อใช้ Grid Layout
+        } else {
+          dashboard1.style.display = "none"; // ซ่อน
+          dashboard1.classList.remove("grid-layout"); // ลบคลาส Grid Layout
+        }
+          }
+
+      function toggleDashboard_input() {
+          const dashboard1 = document.getElementById("dash");
+          if (dashboard1.style.display === "none" || dashboard1.style.display === "") {
+              dashboard1.style.display = "block";
+          } else {
+              dashboard1.style.display = "none";
+          }
+      }
+      function toggleDashboard_status() {
+          const dashboard1 = document.getElementById("statusTab");
+          const dashboard2 = document.getElementById("dash");
+          const dashboard3 = document.getElementById("dashboard1");
+          if (dashboard1.style.display === "none" || dashboard1.style.display === "") {
+              dashboard1.style.display = "block";
+              dashboard2.style.display = "none";
+              dashboard3.style.display = "none";
+              fetchAndProcessData();
+          } else {
+              dashboard1.style.display = "none";
+              
+          }
+      }
+      
+
+  </script>
+
+  <!-- <script src="chart.js?v=1.0"></script> -->
+  <script src="chart.js?v=1.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js?v=1.0"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+  <script src="script3.js?v=1.0"></script>
+  <script src="LED.js"></script>
+  <script>
+    async function fetchAndProcessData() {
+    try {
+        const response = await fetch("https://api2-1-s6j1.onrender.com/api/Data_Alarm");
+        const data = await response.json();
+
+        const inputCounts = {};
+        for (let i = 1; i <= 7; i++) {
+            inputCounts[i] = 0; // ตั้งค่าเริ่มต้นเป็น 0
+        }
+
+        // นับจำนวน Object แต่ละ input_ID
+        data.forEach(item => {
+            const inputID = item.input_ID;
+            if (inputCounts[inputID] !== undefined) {
+                inputCounts[inputID]++;
+            }
+        });
+
+        const radarDataValues = Object.values(inputCounts);
+
+        // อัปเดต Radar Chart
+        updateRadarChart(radarDataValues);
+
+        // อัปเดตข้อมูลในตาราง
+        updateTable(inputCounts);
+
+    } catch (error) {
+        console.error("Error fetching or processing data:", error);
+    }
+}
+
+// function updateRadarChart(radarDataValues) {
+//     const ctx = document.getElementById('radarChart').getContext('2d');
+
+//     if (window.radarChart && typeof window.radarChart.destroy === 'function') {
+//         window.radarChart.destroy();
+//     }
+
+//     const radarData = {
+//         // labels: ['ปั้มดับ', 'กระทุ่งไม่กลับ', 'แคมไม่ล็อก', 'ประตูหน้าเปิดค้าง', 'โมลไม่เปิด', 'ไม่กระทุ้ง', 'โมลไม่ปิด'],
+//         labels: ['แคมไม่ล็อก', 'ปั้มดับ', 'ประตูหน้าเปิดค้าง', 'โมลไม่เปิด', 'โมลไม่ปิด', 'กระทุ่งไม่กลับ', 'ไม่กระทุ่ง'],
+        
+//         datasets: [{
+//             label: 'Object Count per Input ID',
+//             data: radarDataValues,
+//             backgroundColor: 'rgba(0, 209, 255, 0.2)',
+//             borderColor: 'rgba(0, 209, 255, 1)',
+//             borderWidth: 1
+//         }]
+//     };
+
+//     const radarOptions = {
+//         responsive: true,
+//         scales: {
+//             r: {
+//                 ticks: {
+//                     display: true,
+//                     color: '#00d1ff',
+//                     backdropColor: 'transparent',
+//                 },
+//                 grid: {
+//                     color: '#444'
+//                 },
+//                 angleLines: {
+//                     color: '#555'
+//                 }
+//             }
+//         },
+//         plugins: {
+//             legend: {
+//                 display: true,
+//                 labels: {
+//                     color: '#00d1ff'
+//                 }
+//             }
+//         }
+//     };
+
+//     window.radarChart = new Chart(ctx, {
+//         type: 'radar',
+//         data: radarData,
+//         options: radarOptions
+//     });
+// }
+
+function updateRadarChart(radarDataValues, customLabels = null) {
+    const ctx = document.getElementById('radarChart').getContext('2d');
+
+    // ตรวจสอบว่า radarChart มีอยู่ก่อนหน้านี้หรือไม่ ถ้ามีก็ทำลาย
+    if (window.radarChart && typeof window.radarChart.destroy === 'function') {
+        window.radarChart.destroy();
+    }
+
+    // ใช้ labels ที่กำหนด หรือ fallback ไปที่ค่า default
+    const defaultLabels = ['แคมไม่ล็อก', 'ปั้มดับ', 'ประตูหน้าเปิดค้าง', 'โมลไม่เปิด', 'โมลไม่ปิด', 'กระทุ่งไม่กลับ', 'ไม่กระทุ่ง'];
+    const radarLabels = customLabels || defaultLabels;
+
+    // ตรวจสอบว่าข้อมูล radarDataValues ตรงกับจำนวน labels หรือไม่
+    if (radarDataValues.length !== radarLabels.length) {
+        console.error('Data length does not match labels length!');
+        return;
+    }
+
+    const radarData = {
+        labels: radarLabels,
+        datasets: [{
+            label: 'จำนวน Alarm โดยรวม ',
+            data: radarDataValues,
+            backgroundColor: 'rgba(0, 209, 255, 0.2)',
+            borderColor: 'rgba(0, 209, 255, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const radarOptions = {
+        responsive: true,
+        scales: {
+            r: {
+                ticks: {
+                    display: true,
+                    color: '#00d1ff',
+                    backdropColor: 'transparent',
+                    stepSize: 5,
+                    max: 100 // ปรับตามช่วงของข้อมูลที่ต้องการ
+                },
+                grid: {
+                    color: '#444'
+                },
+                angleLines: {
+                    color: '#555'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                labels: {
+                    color: '#00d1ff'
+                }
+            }
+        }
+    };
+
+    // สร้าง Radar Chart ใหม่
+    window.radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: radarData,
+        options: radarOptions
+    });
+}
+
+
+function updateTable(inputCounts) {
+    const tableBody = document.getElementById("dataTableBody");
+    tableBody.innerHTML = ""; // เคลียร์ข้อมูลในตารางก่อน
+
+    Object.entries(inputCounts).forEach(([inputID, count], index) => {
+        const row = document.createElement("tr");
+
+        const inputIDCell = document.createElement("td");
+        // inputIDCell.textContent = `ลำดับ ${inputID}`;
+        // row.appendChild(inputIDCell);
+        //แก้
+        const descriptionCell = document.createElement("td");
+        // const descriptions = ['ปั้มดับ', 'กระทุ่งไม่กลับ', 'แคมไม่ล็อก', 'ประตูหน้าเปิดค้าง', 'โมลไม่เปิด', 'ไม่กระทุ้ง', 'โมลไม่ปิด'];
+        const descriptions = ['แคมไม่ล็อก', 'ปั้มดับ', 'ประตูหน้าเปิดค้าง', 'โมลไม่เปิด', 'โมลไม่ปิด', 'กระทุ่งไม่กลับ', 'ไม่กระทุ่ง'];
+        // labels: ['แคมไม่ล็อก', 'ปั้มดับ', 'ประตูหน้าเปิดค้าง', 'โมลไม่เปิด', 'โมลไม่ปิด', 'กระทุ่งไม่กลับ', 'ไม่กระทุ่ง'],
+        descriptionCell.textContent = descriptions[index];
+        row.appendChild(descriptionCell);
+
+        const countCell = document.createElement("td");
+        countCell.textContent = count;
+        row.appendChild(countCell);
+
+        tableBody.appendChild(row);
+    });
+}
+
+
+</script>
+
+
+
+
+
+</body>
+</html>

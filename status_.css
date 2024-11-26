@@ -1,0 +1,83 @@
+#statusTab {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 900px;
+    height: 550px;
+    z-index: 9990;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 209, 255, 0.7);
+    padding: 10px;
+}
+
+/* จัดกราฟและตารางในแนวนอน */
+#statusContent {
+    display: flex;
+    flex-direction: row; /* แนวนอน */
+    align-items: center; /* จัดกลางในแนวตั้ง */
+    gap: 20px; /* ระยะห่างระหว่างกราฟและตาราง */
+}
+
+/* จัดการขนาดกราฟ */
+#chartContainer {
+    flex: 2; /* ให้กราฟกินพื้นที่มากกว่า */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#radarChart {
+    width: 80%;
+    height: 80%;
+    max-width: 600px;
+    max-height: 600px;
+}
+
+/* จัดการขนาดตาราง */
+#tableContainer {
+    flex: 1; /* ให้ตารางกินพื้นที่น้อยกว่า */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#dataTable {
+    width: 100%;
+    color: #00d1ff;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+}
+
+#dataTable th, #dataTable td {
+    padding: 10px;
+    border: 1px solid #00d1ff;
+}
+
+/* สำหรับหน้าจอมือถือ */
+@media screen and (max-width: 600px) {
+    #statusContent {
+        
+        flex-direction: column; /* เปลี่ยนเป็นแนวตั้ง */
+        gap: -2px; /* ลดระยะห่างระหว่างกราฟและตาราง */
+    }
+
+    #chartContainer, #tableContainer {
+        width: 100%; /* ใช้พื้นที่เต็มหน้าจอ */
+        
+    }
+
+    #dataTable {
+        width: 90%; /* ทำให้ตารางแคบลง */
+        font-size: 8px; /* ลดขนาดฟอนต์ */
+    }
+
+    #dataTable th, #dataTable td {
+        padding: 3px; /* ลดขนาด Padding */
+    }
+}
+

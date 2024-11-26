@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Data Viewer</title>
+</head>
+<body>
+    <h1>MQTT Data Viewer</h1>
+    <div>
+        <p><strong>Status:</strong> <span id="status">Disconnected</span></p>
+        <p><strong>Topiกc:</strong> <span id="topic">N/A</span></p>
+        <p><strong>Message:</strong> <span id="message">N/A</span></p>
+    </div>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script>
+        const broker = "mqtt://good-moose.com"; // เปลี่ยน broker หากจำเป็น
+        const topic = "Cycletime"; // เปลี่ยนเป็น topic ที่คุณต้องการ
+
+        const client = mqtt.connect(broker);
+
+        client.on("connect", function () {
+            document.getElementById("status").textContent = "Connected";
+            console.log("Connected to MQTT Broker");
+            client.subscribe(topic, function (err) {
+                if (!err) {
+                    document.getElementById("topic").textContent = topic;
+                    console.log(`Subscribed to topic: ${topic}`);
+                } else {
+                    console.error("Subscription error:", err);
+                }
+            });
+        });
+
+        client.on("message", function (receivedTopic, message) {
+            if (receivedTopic === topic) {
+                const messageText = message.toString();
+                document.getElementById("message").textContent = messageText;
+                console.log(`Message received: ${messageText}`);
+            }
+        });
+
+        client.on("close", function () {
+            document.getElementById("status").textContent = "Disconnected";
+            console.log("Disconnected from MQTT Broker");
+        });
+
+        client.on("error", function (error) {
+            document.getElementById("status").textContent = "Error";
+            console.error("MQTT Error:", error);
+        });
+    </script>
+</body>
+</html>

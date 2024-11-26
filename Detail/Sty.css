@@ -1,0 +1,113 @@
+/* การตั้งค่าพื้นฐานของหน้า */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #0b0e19;
+  color: #ffffff;
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+}
+
+/* ส่วนจัดการ Date Picker */
+.LCD .date-picker-container {
+
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 35px;
+  left: 35px;
+
+}
+
+.LCD .date-picker-container label {
+  color: #00d1ff;
+  font-size: 1em;
+}
+
+.LCD .date-picker-container input[type="date"] {
+  padding: 5px;
+  font-size: 1em;
+  background-color: #1b203a;
+  color: #ffffff;
+  border: 1px solid #00d1ff;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* ส่วนสำหรับจัดวางกราฟให้อยู่ข้างกัน */
+.charts-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  
+}
+
+canvas {
+  width: 45vw;
+  max-width: 900px;
+  height: 60vh;
+  max-height: 500px;
+  background-color: #14172b;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3),
+              0 0 40px rgba(0, 209, 255, 0.2),
+              0 0 60px rgba(0, 183, 255, 0.1);
+  padding: 10px;
+ 
+
+}
+
+/* ปรับขนาดให้เหมาะกับ iPad Gen 8 หรือหน้าจอขนาดกลาง */
+@media (max-width: 700px)  {
+  /* .date-picker-container {
+      flex-direction: column;
+      align-items: center;
+  } */
+  
+  .charts-container {
+    /* flex-direction: column; */
+    display: flex;
+    position: absolute;
+    top: 12%;
+    left: 20px;
+    /* flex-direction: row; */
+    /* flex-wrap: wrap; */
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  /* canvas {
+      width: 40vw; 
+      max-width: 20px;
+      height: 50vh;
+      max-height: 350px;
+  } */
+  canvas {
+    width: 15vw;
+    max-width: 500px;
+    height: 60vh;
+    max-height: 100px;
+    background-color: #14172b;
+  }
+}
+
+/* ปรับขนาดให้เหมาะกับอุปกรณ์ขนาดเล็กมาก */
+@media (max-width: 600px) {
+  .charts-container {
+    top: 20px;
+      flex-direction: column;
+      align-items: center;
+  }
+  canvas {
+      width: 90vw;
+      max-width: 100%;
+  }
+}
+

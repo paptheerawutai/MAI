@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT WebSocket Client</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        #messages {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>MQTT WebSocket Client</h2>
+    <label for="topic">Select Topic:</label>
+    <select id="topic">
+        <option value="/pap/001">/pap/001</option>
+        <option value="/MAI/Machine_41_in1">/MAI/Machine_41_in1</option>
+        <option value="/MAI/Machine_41_in0">/MAI/Machine_41_in0</option>
+    </select>
+    <button onclick="connectMQTT()">Connect and Subscribe</button>
+    <div id="status">Status: Not connected</div>
+    <div id="messages">Received Messages:</div>
+
+    <script>
+        let client;
+        let isConnected = false;
+
+        function connectMQTT() {
+            if (isConnected) {
+                // ตรวจสอบว่าถ้าเชื่อมต่อแล้วไม่ต้องทำอะไร
+                console.log("Already connected to MQTT Broker");
+                return;
+            }
+
+            const selectedTopic = document.getElementById("topic").value;
+
+            // เชื่อมต่อกับ MQTT Broker ผ่าน WebSocket
+            client = mqtt.connect('ws://good-moose.com:8083', {
+                username: 'yourUsername', // ใส่ username ถ้ามี
+                password: 'yourPassword'  // ใส่ password ถ้ามี
+            });
+
+            // เมื่อเชื่อมต่อสำเร็จ
+            client.on('connect', () => {
+                console.log('Connected to MQTT Broker');
+                document.getElementById('status').textContent = 'Status: Connected';
+                isConnected = true;
+
+                // สมัครสมาชิกกับ topic ที่ผู้ใช้เลือก
+                client.subscribe(selectedTopic, (err) => {
+                    if (!err) {
+                        console.log(`Subscribed to topic: ${selectedTopic}`);
+                        displayMessage(`Subscribed to topic: ${selectedTopic}`);
+                    } else {
+                        console.error('Subscription error:', err);
+                    }
+                });
+            });
+
+            // ตั้งค่าให้รับข้อความแบบ real-time
+            client.on('message', (topic, message) => {
+                displayMessage(`[Topic: ${topic}] ${message.toString()}`);
+            });
+
+            // จัดการข้อผิดพลาดการเชื่อมต่อ
+            client.on('error', (error) => {
+                console.error('Connection error:', error);
+                document.getElementById('status').textContent = 'Status: Connection error';
+            });
+
+            // เมื่อการเชื่อมต่อถูกตัดขาด
+            client.on('close', () => {
+                console.log('Disconnected from MQTT Broker');
+                document.getElementById('status').textContent = 'Status: Disconnected';
+                isConnected = false;
+            });
+        }
+
+        function displayMessage(message) {
+            const messagesDiv = document.getElementById("messages");
+            const newMessage = document.createElement("div");
+            newMessage.textContent = message;
+            messagesDiv.appendChild(newMessage);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
